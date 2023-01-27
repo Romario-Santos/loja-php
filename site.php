@@ -19,7 +19,7 @@ $app->get("/categories/:idcategory",function($idcategory){
 	$page = new Page();
 	$page->setTpl("category",[
 		"category"=>$category->getValues(),
-		"products"=>[]
+		"products"=>Product::checkList($category->getProducts())
 	]);
 });
 //fim categoria do site
