@@ -107,5 +107,29 @@ class Category extends Model
             ":idproduct"=>$product->getidproduct()
         ));
     }
+
+    public function getProductsPage($page = 1,$itemsPerPage = 8)
+    {   //calcula o inicio da paginação
+        $start = ($page - 1) * $itemsPerPage;
+
+        $sql = new Sql();
+        $results = $sql->select("select SQL_CALC_FOUND_ROWS * 
+        from tb_products a
+        inner join tb_productscategories b on a.idproduct = b.idproduct
+        inner join tb_categories c on c.idcategory = b.idcategory
+        where c.idcategory = :idcategory
+        LIMIT $start,$itemsPerPage;",
+        array(
+            ":idcategory"=>$this->getidcategory()
+        ));
+
+        $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;"); //retorna o total de linhas da consulta
+
+        return [
+            "data"=>Product::checkList($results),
+            "total"=>(int)$resultTotal[0]["nrtotal"],
+            "pages"=>ceil($resultTotal[0]["nrtotal"] / $itemsPerPage)//ceil arredonda para cima
+        ];
+    }
 }
 ?>
