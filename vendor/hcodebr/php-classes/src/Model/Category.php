@@ -111,9 +111,11 @@ class Category extends Model
     public function getProductsPage($page = 1,$itemsPerPage = 8)
     {   //calcula o inicio da paginação
         $start = ($page - 1) * $itemsPerPage;
-
+        
+        //consultar trazendo os produtos da categoria, e o total de produtos da categoria, para fazer a paginação , o sql_calc_found_rows retorna o total de linhas da consulta
+        //limit $start,$itemsPerPage; limita a consulta para trazer apenas os produtos da paginação
         $sql = new Sql();
-        $results = $sql->select("select SQL_CALC_FOUND_ROWS * 
+        $results = $sql->select("SELECT SQL_CALC_FOUND_ROWS * 
         from tb_products a
         inner join tb_productscategories b on a.idproduct = b.idproduct
         inner join tb_categories c on c.idcategory = b.idcategory

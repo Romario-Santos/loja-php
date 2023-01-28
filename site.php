@@ -40,4 +40,24 @@ $app->get("/categories/:idcategory",function($idcategory){
 		"pages"=>$pages
 	]);
 });
+
+$app->get("/products/:desurl",function($desurl){
+
+	$product = new Product();
+//var_dump($desurl);
+	$product->getFromURL($desurl);
+
+	$page = new Page();
+
+//var_dump($product->getValues());
+//exit;
+
+	$page->setTpl("product-detail",[
+		"product"=>$product->getValues(),
+		"categories"=>$product->getCategories()
+	]);
+	
+});
+
+
 //fim categoria do site
